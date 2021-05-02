@@ -1,0 +1,29 @@
+#!/bin/bash
+# https://anagora.org/snapshots
+
+# This hacky script assumes you clone it in your home directory.
+OUTPUTDIR=~/snapshots
+
+# The root to your TabFS install
+TFS=~/TabFS
+# Should not need to be adjusted.
+TABDIR="${TFS}/fs/mnt/tabs"
+
+# This should probably become just $HOSTNAME.csv instead, as it makes more sense to use git for versioning?
+#
+# But it seems like a reasonable first try/default to have snapshots as separate files for now, makes it simpler to search in all history.
+OUTPUT="${OUTPUTDIR}/$USER/tabs/$HOSTNAME.$(date -Iseconds).csv"
+
+if [[ ! -d $OUTPUTDIR ]]
+then
+    echo "$OUTPUTDIR should be a directory."
+    file $OUTPUTDIR
+    exit 42
+fi
+
+# Hacky csv, I regret nothing... yet.
+echo "url,title,active" > $OUTPUT
+
+for tab in $TABDIR/by-id/*; do 
+    echo \"$(sed -e 's/"/""/g' $tab/url.txt)\", \"$(sed -e 's/"/""/g' $tab/title.txt)\", \"$(sed -e 's/"/""/g' $tab/active)\" >> $OUTPUT
+done
