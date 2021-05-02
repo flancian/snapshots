@@ -7,4 +7,4 @@ More information in https://anagora.org/snapshots.
 
 ## Directory format
 
-username/source/hostname.timestamp.format
+`$USERNAME/$SOURCE/$HOSTNAME-$TIMESTAMP.$FORMAT`
